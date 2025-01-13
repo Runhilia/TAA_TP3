@@ -1,5 +1,8 @@
 import random
 import numpy as np
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
 
 
 def etiquetage(y_train_, pourcentage):
@@ -74,6 +77,31 @@ def laplacien(X_train_non_lab, y_train_non_lab):
         
     return score_lap
         
+def plot_efficacite_courbe(X_train, X_test, y_train, y_test, score, step = 5):
+    sorted_index = np.argsort(-score)
+    X_train = X_train[:,sorted_index]
+    X_test = X_test[:,sorted_index]
+    
+    n_feature = []
+    acc_list = []
+    for num_var in range(step, X_train.shape[1]+1, step):
+        X_train_sub = X_train[:,:num_var]
+        X_test_sub = X_test[:,:num_var]
+        
+        mlp = MLPClassifier(hidden_layer_sizes=(100, 100), max_iter=1000)
+        mlp.fit(X_train_sub, y_train)
+        y_pred = mlp.predict(X_test_sub)
+        acc_list.append(accuracy_score(y_test, y_pred))
+        n_feature.append(num_var)
+        
+    plt.plot(n_feature, acc_list)
+    plt.xlabel('Nombre de variables')
+    plt.ylabel('Accuracy')
+    plt.title('Efficacité du modèle en fonction du nombre de variables')
+    
+        
+    
+    
     
     
     
