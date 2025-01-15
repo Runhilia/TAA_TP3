@@ -30,7 +30,6 @@ def pertinence(X_train, y_train):
     
     index_non_lab = np.where(np.isnan(y_train))
     X_train_non_lab = X_train[index_non_lab]
-    y_train_non_lab = y_train[index_non_lab]
     
     score_laplacien = laplacien(X_train_non_lab)
     
